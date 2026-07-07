@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#02050b">
+  <meta name="description" content="可交互的计算机考研 408 知识宇宙，覆盖数据结构、计算机组成原理、操作系统与计算机网络大纲知识点。">
+  <title>408 知识宇宙 | 四门核心课程星图</title>
+  <style>
+    :root{--bg:#02050b;--panel:rgba(7,13,23,.78);--line:rgba(154,184,214,.16);--text:#eef6ff;--muted:#8fa5b9;--accent:#f4c96b;--radius:14px;--safe-top:max(18px,env(safe-area-inset-top));font-family:"Microsoft YaHei UI","Noto Sans SC",system-ui,sans-serif;color-scheme:dark}
+    *{box-sizing:border-box} html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+    button,input{font:inherit} button{color:inherit} button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    .cosmos-bg,.cosmos-vignette{display:none}
+    #space{position:fixed;z-index:2;inset:0;width:100%;height:100%;cursor:grab;touch-action:none} #space.dragging{cursor:grabbing}
+    .grain{position:fixed;z-index:3;inset:0;pointer-events:none;opacity:.16;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E")}
+    .topbar{position:fixed;z-index:5;left:clamp(16px,3vw,42px);right:clamp(16px,3vw,42px);top:var(--safe-top);display:grid;grid-template-columns:minmax(210px,1fr) minmax(260px,430px) auto;gap:22px;align-items:center;pointer-events:none}
+    .brand,.search,.controls,.legend,.hint,.details{pointer-events:auto}.brand{display:flex;align-items:center;gap:13px}.mark{width:35px;height:35px;border:1px solid rgba(244,201,107,.6);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 26px rgba(244,201,107,.22),inset 0 0 14px rgba(244,201,107,.12)}.mark:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+    .brand strong{font-size:15px;letter-spacing:.08em}.brand span{display:block;color:var(--muted);font:11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.06em;margin-top:2px}
+    .search{position:relative}.search input{width:100%;height:44px;padding:0 48px 0 17px;border:1px solid rgba(168,196,221,.2);border-radius:var(--radius);background:rgba(5,10,18,.68);color:var(--text);backdrop-filter:blur(16px);box-shadow:0 14px 50px rgba(0,0,0,.24)}.search input::placeholder{color:#6f8598}.search kbd{position:absolute;right:12px;top:10px;border:1px solid rgba(173,199,224,.2);border-radius:6px;padding:3px 7px;color:#8195a7;background:rgba(255,255,255,.03);font:10px ui-monospace,monospace}
+    .controls{display:flex;gap:7px}.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(168,196,221,.18);background:rgba(5,10,18,.66);backdrop-filter:blur(14px);cursor:pointer;font-size:18px;transition:.18s ease}.icon-btn:hover{border-color:rgba(244,201,107,.5);background:rgba(244,201,107,.08)}.icon-btn:active{transform:scale(.96)}
+    .legend{position:fixed;z-index:5;left:clamp(16px,3vw,42px);bottom:max(20px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:6px;align-items:flex-start}.legend-title{color:#71879b;font:10px ui-monospace,monospace;letter-spacing:.16em;margin:0 0 4px 4px}.filter{border:0;background:transparent;color:#9aafc1;padding:7px 9px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:9px;font-size:12px;transition:.18s}.filter:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}.filter:hover,.filter.active{background:rgba(255,255,255,.06);color:#fff}.filter:not(.active){opacity:.45}
+    .hint{position:fixed;z-index:4;right:clamp(16px,3vw,42px);bottom:max(22px,env(safe-area-inset-bottom));color:#71879a;font:10px/1.6 ui-monospace,monospace;letter-spacing:.06em;text-align:right;transition:opacity .5s}.hint.hide{opacity:0;pointer-events:none}
+    .details{position:fixed;z-index:8;right:clamp(12px,2.4vw,34px);top:94px;bottom:28px;width:min(390px,calc(100vw - 24px));border:1px solid rgba(180,205,229,.17);border-radius:var(--radius);background:linear-gradient(160deg,rgba(12,20,33,.93),rgba(4,9,17,.88));backdrop-filter:blur(24px) saturate(130%);box-shadow:0 28px 90px rgba(0,0,0,.48);transform:translateX(calc(100% + 52px));opacity:0;transition:transform .42s cubic-bezier(.22,1,.36,1),opacity .3s;overflow:hidden}.details.open{transform:none;opacity:1}.details-inner{height:100%;overflow:auto;padding:28px 27px 34px}.close{position:absolute;right:16px;top:16px;border:0;background:transparent;color:#8399ac;font-size:24px;cursor:pointer;width:34px;height:34px;border-radius:50%}.close:hover{background:rgba(255,255,255,.07);color:#fff}
+    .subject-tag{display:flex;align-items:center;gap:8px;color:var(--node-color);font:11px ui-monospace,monospace;letter-spacing:.12em;margin-bottom:28px}.subject-tag:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--node-color);box-shadow:0 0 12px var(--node-color)}.details h2{font-size:clamp(25px,3vw,34px);line-height:1.15;letter-spacing:-.04em;margin:0 35px 10px 0}.breadcrumb{color:#6f8598;font-size:12px;line-height:1.65;margin:0 0 28px}.rule{height:1px;background:linear-gradient(90deg,var(--node-color),transparent);opacity:.5;margin:0 0 24px}.details h3{font-size:11px;letter-spacing:.14em;color:#8298aa;margin:25px 0 10px}.details p{color:#c3d0db;font-size:14px;line-height:1.85;margin:0}.details ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}.details li{position:relative;padding-left:17px;color:#b4c3cf;font-size:13px;line-height:1.65}.details li:before{content:"";position:absolute;left:1px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--node-color);box-shadow:0 0 7px var(--node-color)}
+    .intro{position:fixed;z-index:7;left:clamp(18px,7vw,110px);top:50%;transform:translateY(-50%);width:min(590px,calc(100vw - 36px));pointer-events:none;transition:opacity .6s,transform .7s}.intro.gone{opacity:0;transform:translateY(-46%);pointer-events:none}.intro .eyebrow{font:11px ui-monospace,monospace;letter-spacing:.22em;color:var(--accent);margin-bottom:18px}.intro h1{font-size:clamp(48px,7.5vw,104px);line-height:.88;letter-spacing:-.065em;margin:0 0 24px;font-weight:650}.intro h1 i{font-style:normal;color:transparent;-webkit-text-stroke:1px rgba(231,241,250,.48)}.intro p{max-width:440px;color:#9eb1c1;font-size:14px;line-height:1.8;margin:0 0 28px}.intro button{pointer-events:auto;border:1px solid rgba(244,201,107,.6);border-radius:999px;background:rgba(244,201,107,.1);color:#ffe2a3;padding:12px 19px;cursor:pointer;font-weight:600;letter-spacing:.05em;transition:.2s}.intro button:hover{background:var(--accent);color:#151005}.intro button:active{transform:translateY(1px)}
+    .status{position:fixed;z-index:4;left:50%;top:78px;transform:translateX(-50%);color:#7890a4;font:10px ui-monospace,monospace;letter-spacing:.12em;pointer-events:none}
+    .noscript{position:fixed;inset:0;display:grid;place-items:center;padding:24px;background:#02050b;color:#fff;z-index:99;text-align:center}
+    @media(max-width:780px){.cosmos-bg{background-position:73% center}.topbar{grid-template-columns:1fr auto;gap:10px}.brand span{display:none}.search{grid-row:2;grid-column:1/-1}.controls .zoom{display:none}.status{top:130px}.legend{bottom:16px}.filter{font-size:0;padding:9px}.filter:before{width:9px;height:9px}.hint{display:none}.details{top:145px;bottom:12px}.intro{top:52%}.intro h1{font-size:clamp(46px,18vw,74px)}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important}.grain{display:none}}
+  </style>
+</head>
+<body>
+  <div class="cosmos-bg" id="galaxy" aria-hidden="true"></div><div class="cosmos-vignette" aria-hidden="true"></div><canvas id="space" aria-label="408 知识点交互星图"></canvas><div class="grain"></div>
+  <header class="topbar">
+    <div class="brand"><div class="mark"></div><div><strong>408 KNOWLEDGE UNIVERSE</strong><span>COMPUTER SCIENCE CONSTELLATION</span></div></div>
+    <label class="search"><input id="search" type="search" placeholder="搜索知识点，例如：页面置换、AVL、TCP" aria-label="搜索知识点"><kbd>/</kbd></label>
+    <div class="controls"><button class="icon-btn zoom" id="minus" aria-label="缩小">−</button><button class="icon-btn zoom" id="plus" aria-label="放大">+</button><button class="icon-btn" id="home" aria-label="回到全景">⌂</button></div>
+  </header>
+  <div class="status" id="status"></div>
+  <nav class="legend" aria-label="科目筛选"><p class="legend-title">GALAXY FILTER</p></nav>
+  <div class="hint" id="hint">拖拽漫游 · 滚轮缩放<br>点击星体查看知识点</div>
+  <section class="intro" id="intro"><div class="eyebrow">2026 · 计算机学科专业基础综合</div><h1>把 408<br>装进<i>宇宙</i></h1><p>四门课程化作四条星河。沿着知识的引力，从数据结构出发，穿过硬件、系统与网络的深空。</p><button id="enter">进入知识星系</button></section>
+  <aside class="details" id="details" aria-live="polite"><button class="close" id="close" aria-label="关闭详情">×</button><div class="details-inner"><div class="subject-tag" id="dSubject"></div><h2 id="dTitle"></h2><p class="breadcrumb" id="dPath"></p><div class="rule"></div><h3>大纲要求</h3><p id="dDesc"></p><h3>复习坐标</h3><ul id="dPoints"></ul></div></aside>
+  <noscript><div class="noscript">请启用 JavaScript 以探索 408 知识宇宙。</div></noscript>
+<script>
+const SUBJECTS=[
+ {id:'ds',name:'数据结构',color:'#b8d8d3',start:-2.75,chapters:[
+  ['绪论',[['基本概念','数据、数据元素、数据对象与抽象数据类型；逻辑结构、存储结构和数据运算。','逻辑结构与物理结构|算法五个特性|抽象数据类型'],['算法分析','理解算法效率，以时间复杂度与空间复杂度衡量资源开销。','渐进复杂度|最好、最坏与平均情形|递归复杂度']]],
+  ['线性表',[['顺序表','掌握线性表的顺序存储、基本操作及其时间复杂度。','插入与删除|动态分配|元素移动次数'],['单链表','掌握带头结点与不带头结点单链表的建立、查找、插入和删除。','头插与尾插|逆置|双指针'],['双链表与循环链表','理解双向链接与循环结构的操作边界和适用场景。','前驱与后继|循环终止条件|静态链表']]],
+  ['栈、队列和数组',[['栈','掌握栈的顺序与链式存储，理解后进先出约束及应用。','共享栈|表达式求值|括号匹配'],['队列','掌握循环队列、链队列与双端队列的结构和操作。','队空队满判定|循环队列容量|受限双端队列'],['栈和队列的应用','运用栈与队列解决递归、层次遍历和调度问题。','递归转非递归|BFS|进制转换'],['特殊矩阵与稀疏矩阵','掌握数组存储地址计算及对称、三角、三对角矩阵的压缩存储。','行优先与列优先|下标映射|三元组表']]],
+  ['串',[['串的存储与模式匹配','理解串的定长、堆分配存储和朴素模式匹配。','子串定位|匹配复杂度|存储方式'],['KMP 算法','掌握前缀函数、next 数组及改进的 nextval。','最长相等前后缀|失配跳转|手算 next']]],
+  ['树与二叉树',[['树的基本概念','掌握结点度、层次、高度、路径及森林等基本性质。','结点数关系|高度边界|有序树'],['二叉树性质与存储','掌握二叉树、完全二叉树的性质及顺序和链式存储。','完全二叉树编号|叶结点计数|二叉链表'],['二叉树遍历','掌握先序、中序、后序、层序遍历及由序列构造二叉树。','递归与非递归|线索二叉树|唯一性条件'],['树、森林与二叉树转换','掌握孩子兄弟表示法与三者间的遍历对应关系。','左孩子右兄弟|森林转换|遍历序列'],['哈夫曼树与编码','掌握带权路径长度、最优二叉树构造与前缀编码。','WPL|贪心合并|编码长度'],['并查集','掌握集合合并、查找、路径压缩与按秩合并。','双亲表示|近常数复杂度|连通性']]],
+  ['图',[['图的基本概念','理解有向图、无向图、简单图、连通性、度和路径。','度数之和|强连通|生成子图'],['图的存储','掌握邻接矩阵、邻接表、十字链表和邻接多重表。','空间复杂度|出入度统计|稠密与稀疏'],['广度与深度优先搜索','掌握 BFS、DFS 过程、生成树及复杂度分析。','队列与递归|遍历森林|连通分量'],['最小生成树','掌握 Prim 与 Kruskal 算法的思想、步骤及适用图。','切分性质|并查集|复杂度比较'],['最短路径','掌握 Dijkstra、Floyd 算法及单源和多源最短路径。','松弛操作|负权限制|路径还原'],['拓扑排序与关键路径','掌握 DAG 的拓扑序、AOE 网关键活动和工程工期。','入度法|ve/vl|环检测']]],
+  ['查找',[['顺序与折半查找','掌握查找判定树、平均查找长度和折半边界。','ASL|有序表|失败结点'],['分块查找','理解索引顺序查找的分块策略与效率。','索引表|块内查找|块长选择'],['二叉排序树','掌握 BST 的查找、插入、删除及性能退化。','中序有序|删除三种情形|ASL'],['平衡二叉树','掌握 AVL 平衡因子及 LL、RR、LR、RL 旋转。','最小结点数|插入调整|旋转定位'],['红黑树','理解红黑性质、黑高与插入删除调整的基本思想。','最长路径界|染色|旋转'],['B 树与 B+ 树','掌握多路平衡查找树的结构、查找、插入和删除。','阶与关键字数|分裂合并|叶结点链'],['散列表','掌握散列函数、冲突处理和装填因子对性能的影响。','开放定址|拉链法|成功失败 ASL']]],
+  ['排序',[['排序基本概念','理解稳定性、内部与外部排序及评价指标。','时空复杂度|稳定性|移动次数'],['插入与希尔排序','掌握直接插入、折半插入和希尔排序过程。','哨兵|增量序列|稳定性'],['交换排序','掌握冒泡排序与快速排序的划分、递归和复杂度。','枢轴选择|最坏情形|空间复杂度'],['选择与堆排序','掌握简单选择排序、堆的调整与堆排序过程。','建堆|向下调整|Top K'],['归并与基数排序','掌握二路归并、基数排序的趟数与适用条件。','辅助空间|稳定性|最低位优先'],['外部排序','理解置换选择、最佳归并树与多路平衡归并。','败者树|归并趟数|缓冲区']]]
+ ]},
+ {id:'co',name:'计算机组成原理',color:'#e5c08a',start:-1.15,chapters:[
+  ['计算机系统概述',[['计算机系统层次结构','理解硬件与软件、各级语言及翻译程序之间的关系。','机器语言|汇编与高级语言|透明性'],['计算机性能指标','掌握吞吐量、响应时间、CPU 时间、CPI、MIPS 与加速比。','主频与时钟周期|Amdahl 定律|基准程序']]],
+  ['数据表示与运算',[['数制与编码','掌握进位计数制转换、定点数表示和 BCD、字符、校验码。','原反补移码|奇偶校验|海明码'],['定点数运算','掌握补码加减、移位、溢出判断与乘除法原理。','符号扩展|双符号位|阵列乘法'],['浮点数表示','掌握 IEEE 754 格式、规格化、范围与精度。','阶码偏置|隐藏位|特殊值'],['浮点数运算','理解对阶、尾数运算、规格化、舍入及溢出处理。','大阶对齐|保护位|就近舍入'],['算术逻辑单元','理解 ALU、串行与并行进位加法器的工作原理。','全加器|先行进位|标志位']]],
+  ['存储系统',[['存储器层次结构','理解局部性原理、层次化存储与性能指标。','命中率|平均访问时间|带宽'],['主存储器','掌握 SRAM、DRAM、ROM 特性与存储器芯片扩展。','刷新|位扩展与字扩展|地址译码'],['多模块存储器','掌握单体多字与低位交叉编址的并行访问。','流水访问|带宽|冲突'],['Cache 基本原理','掌握 Cache 与主存地址映射、替换和写策略。','直接映射|组相联|写回与写直达'],['Cache 性能计算','计算命中率、缺失代价、平均访问时间并分析优化。','块大小|多级 Cache|AMAT'],['虚拟存储器','理解页式虚拟存储、TLB、页表与 Cache 的协同。','地址转换|缺页|TLB 与 Cache 次序']]],
+  ['指令系统',[['指令格式','掌握操作码、地址码、指令字长及扩展操作码。','零至四地址|定长变长|操作码空间'],['寻址方式','掌握立即、直接、间接、寄存器、相对、基址和变址寻址。','有效地址|访存次数|数组与跳转'],['数据对齐与端序','理解大端、小端存储及边界对齐对地址的影响。','字节编址|对齐边界|数据读取'],['CISC 与 RISC','比较复杂指令集与精简指令集的设计特点。','指令长度|寻址方式|流水线友好性']]],
+  ['中央处理器',[['CPU 的功能与结构','理解运算器、控制器、寄存器组和数据通路。','PC、IR、MAR、MDR|专用寄存器|内部总线'],['指令执行过程','掌握取指、间址、执行与中断周期的数据流。','微操作序列|指令周期|数据通路'],['数据通路','分析单总线、多总线与专用通路中控制信号。','寄存器传送|ALU 输入|时钟周期'],['硬布线控制器','理解时序系统、控制信号产生与组合逻辑设计。','节拍|机器周期|控制条件'],['微程序控制器','掌握微指令格式、微地址形成与微程序执行。','水平与垂直型|控制存储器|字段编码'],['指令流水线','掌握流水线性能、数据冒险、控制冒险和结构冒险。','吞吐率与加速比|转发与阻塞|分支预测'],['多处理器基础','理解 SISD、SIMD、MIMD、硬件多线程与多核共享。','Flynn 分类|共享内存|一致性基础']]],
+  ['总线',[['总线概述','掌握总线分类、组成、性能指标与突发传输。','带宽|总线宽度|同步与异步'],['总线事务与定时','理解同步、异步通信的握手过程与传输周期。','请求响应|半同步|分离事务'],['总线仲裁','掌握集中式与分布式仲裁的优缺点。','链式查询|计数器定时|独立请求']]],
+  ['输入输出系统',[['I/O 接口','理解 I/O 接口功能、端口编址与设备控制。','统一与独立编址|状态端口|字符块设备'],['程序查询与程序中断','掌握轮询、中断响应、隐指令及多重中断。','中断屏蔽字|优先级|断点保护'],['DMA 方式','掌握 DMA 控制器、传送过程及与 CPU 争用主存。','周期挪用|突发传送|DMA 请求'],['I/O 处理机','理解通道方式与 I/O 处理机对外设管理的卸载。','通道程序|字节多路|选择通道']]]
+ ]},
+ {id:'os',name:'操作系统',color:'#a9c7e8',start:.45,chapters:[
+  ['操作系统概述',[['基本概念与特征','理解操作系统的目标、功能以及并发、共享、虚拟、异步特征。','资源管理|并发与并行|虚拟机'],['运行环境','掌握用户态与内核态、特权指令、中断异常和系统调用。','访管指令|中断向量|系统调用过程'],['体系结构','理解分层、模块化、宏内核、微内核与外核的取舍。','机制与策略|内核服务|性能与可靠性'],['启动过程','理解从固件、引导程序到内核初始化和用户进程的流程。','Bootloader|内核装载|init 进程']]],
+  ['进程与线程',[['进程与进程控制','掌握进程状态、转换、PCB、创建、终止、阻塞和唤醒。','五状态模型|上下文切换|原语'],['线程与多线程模型','理解用户级、内核级线程和多对一、一对一、多对多模型。','线程资源|调度单位|映射模型'],['处理机调度','掌握调度层次、FCFS、SJF、优先级、时间片和多级反馈队列。','周转与响应时间|抢占|饥饿'],['进程同步','掌握临界区、软件与硬件互斥、信号量、管程和条件变量。','P/V 操作|Peterson|互斥与同步'],['经典同步问题','运用信号量解决生产者消费者、读者写者与哲学家问题。','前驱关系|死锁规避|同步代码'],['进程通信','理解共享内存、消息传递、管道、信号与套接字。','直接间接通信|命名管道|零拷贝概念'],['死锁','掌握必要条件、预防、避免、检测和解除。','银行家算法|安全序列|资源分配图']]],
+  ['内存管理',[['内存管理基础','理解装入、链接、地址重定位、内存保护和覆盖交换。','逻辑与物理地址|动态重定位|基址限长'],['连续分配','掌握单一、固定与动态分区及首次、最佳、最坏适应算法。','内外碎片|紧凑|伙伴系统'],['分页管理','掌握页表、地址转换、快表和多级页表。','页号页内偏移|TLB|页表项'],['分段与段页式','理解分段的逻辑意义及段页式地址转换。','段表|共享保护|两级转换'],['虚拟内存','掌握请求分页、缺页中断、工作集与抖动。','局部性|驻留集|预调页'],['页面置换算法','掌握 OPT、FIFO、LRU、CLOCK 及性能分析。','Belady 异常|访问位修改位|缺页率'],['内存映射文件','理解文件映射、共享页与写时复制的基本机制。','mmap|共享内存|Copy-on-write']]],
+  ['文件管理',[['文件概念与逻辑结构','掌握文件属性、操作、顺序、索引与索引顺序文件。','FCB|打开文件表|记录组织'],['目录结构','掌握单级、两级、树形、无环图目录与路径解析。','绝对相对路径|硬链接软链接|目录项'],['文件分配','掌握连续、链接、索引分配及混合索引结构。','FAT|inode|最大文件长度'],['空闲空间管理','掌握空闲表、空闲链表、位示图与成组链接法。','盘块分配|位图计算|超级块'],['文件共享与保护','理解访问控制、口令、加密和文件系统一致性。','ACL|引用计数|日志文件系统']]],
+  ['输入输出管理',[['I/O 管理基础','理解设备分类、控制方式、I/O 软件层次与接口。','设备独立性|驱动程序|中断处理'],['I/O 调度','掌握磁盘结构及 FCFS、SSTF、SCAN、C-SCAN 等调度。','寻道距离|磁臂方向|LOOK'],['设备分配','掌握设备分配表、独占共享虚拟设备与安全分配。','SPOOLing|设备控制表|分配策略'],['缓存与缓冲','理解单缓冲、双缓冲、循环缓冲、高速缓存和假脱机。','并行度计算|缓冲池|Cache 区别']]]
+ ]},
+ {id:'cn',name:'计算机网络',color:'#d8aaa4',start:2.05,chapters:[
+  ['计算机网络体系结构',[['网络概述','理解网络组成、功能、分类及标准化组织。','边缘与核心|分组交换|网络拓扑'],['性能指标','掌握速率、带宽、吞吐量、时延、时延带宽积与利用率。','四类时延|RTT|丢包率'],['分层体系结构','理解协议、服务、接口、OSI 与 TCP/IP 模型。','实体与对等层|封装解封装|SAP']]],
+  ['物理层',[['通信基础','掌握信号、信道、码元、波特率、比特率与奈奎斯特、香农定理。','极限数据率|信噪比|带宽'],['编码与调制','理解数字数据编码、模拟调制、PCM 与采样定理。','曼彻斯特|QAM|量化编码'],['交换与复用','掌握电路、报文、分组交换及 FDM、TDM、WDM、CDM。','存储转发|时隙|码片序列'],['传输介质与设备','了解双绞线、同轴、光纤、无线介质及中继器、集线器。','衰减|单模多模|广播域']]],
+  ['数据链路层',[['数据链路功能','理解成帧、透明传输、差错检测与可靠传输。','字符与比特填充|CRC|帧同步'],['流量与差错控制','掌握停止等待、后退 N 帧、选择重传协议。','窗口大小|序号比特|信道利用率'],['介质访问控制','掌握 ALOHA、CSMA、CSMA/CD、CSMA/CA 与轮询。','争用期|最小帧长|隐藏站'],['局域网与以太网','掌握 IEEE 802、MAC 帧、以太网与高速以太网。','MAC 地址|帧格式|冲突域'],['交换机与 VLAN','理解网桥自学习、生成树、VLAN 与 802.1Q。','转发表|广播域|Trunk'],['广域网协议','理解 PPP 等点对点链路协议的帧格式与透明传输。','字节填充|链路控制|同步异步']]],
+  ['网络层',[['网络层功能','理解异构互联、路由与转发、拥塞控制和 SDN 基础。','数据平面|控制平面|虚电路数据报'],['IPv4 地址','掌握分类编址、子网划分、CIDR 与路由聚合。','子网掩码|最长前缀匹配|可用地址'],['IP 数据报','掌握 IPv4 首部、分片重组、TTL 与检验和。','MTU|片偏移|协议字段'],['ARP、DHCP 与 ICMP','理解地址解析、动态配置与差错报告、网络探测。','ARP 表|四报文|Ping 与 Traceroute'],['IPv6','掌握 IPv6 地址表示、基本首部和从 IPv4 过渡方法。','零压缩|扩展首部|双栈与隧道'],['路由算法','掌握距离向量、链路状态算法及层次路由。','Bellman-Ford|Dijkstra|收敛'],['路由协议','理解 RIP、OSPF、BGP 的工作范围与报文交换。','自治系统|内部外部网关|路径向量'],['IP 组播与移动 IP','理解组播地址、IGMP 和移动结点通信的基本思想。','组播树|本地代理|隧道'],['网络地址转换','掌握 NAT/NAPT 地址端口转换及其影响。','私有地址|映射表|端到端原则']]],
+  ['传输层',[['传输层服务','理解进程通信、端口、复用分用及无连接和面向连接服务。','套接字|熟知端口|校验和'],['UDP','掌握 UDP 数据报格式、特点和适用场景。','伪首部|低开销|实时应用'],['TCP 报文与连接','掌握 TCP 首部、序号确认号、三次握手与四次挥手。','SYN/ACK/FIN|TIME_WAIT|半连接'],['TCP 可靠传输','掌握滑动窗口、累计确认、超时重传与快速重传。','RTT 估计|选择确认|字节流'],['TCP 流量控制','理解接收窗口、持续计时器和糊涂窗口综合征。','rwnd|零窗口|Nagle'],['TCP 拥塞控制','掌握慢开始、拥塞避免、快重传和快恢复。','cwnd|ssthresh|AIMD']]],
+  ['应用层',[['客户服务器与 P2P','理解网络应用体系结构、进程通信与套接字接口。','服务端常驻|对等方|应用层协议'],['DNS','掌握域名层次、递归与迭代查询、资源记录和缓存。','根顶级权威服务器|A/AAAA/CNAME|TTL'],['FTP','理解控制连接、数据连接及主动被动模式。','20/21 端口|带外控制|匿名访问'],['电子邮件','理解 SMTP、POP3、IMAP 与 MIME 的协同。','推与拉|报文格式|附件编码'],['万维网与 HTTP','掌握 URL、HTTP 报文、持续连接、Cookie、缓存和代理。','GET/POST|状态码|条件请求'],['HTTPS 与网络安全基础','理解 TLS 提供的机密性、完整性与身份认证。','握手|证书|对称与非对称加密']]]
+ ]}
+];
+
+if(false){
+const canvas=document.querySelector('#space'),ctx=canvas.getContext('2d',{alpha:true}),galaxy=document.querySelector('#galaxy');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W=0,H=0,DPR=1,time=0,hover=null,selected=null,drag=false,moved=false,last={x:0,y:0};
+const camera={x:0,y:0,zoom:.62,targetX:0,targetY:0,targetZoom:.62};
+const nodes=[],links=[],bgStars=[];let active=new Set(SUBJECTS.map(s=>s.id)),query='';
+const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return()=>((h=Math.imul(h^(h>>>13),1274126177))>>>0)/4294967296};
+
+function buildUniverse(){
+ SUBJECTS.forEach((s,si)=>{const span=1.18,center=s.start+span/2;const core={id:s.id,name:s.name,subject:s,level:0,x:Math.cos(center)*225,y:Math.sin(center)*225,r:15,desc:`${s.name}大纲知识星系`,points:['点击章节恒星继续探索'],path:'408'};nodes.push(core);
+  s.chapters.forEach((ch,ci)=>{const a=s.start+(ci+.5)/s.chapters.length*span;const rr=480+ci%2*50;const cn={id:`${s.id}-${ci}`,name:ch[0],subject:s,level:1,x:Math.cos(a)*rr,y:Math.sin(a)*rr,r:8,desc:`${s.name}中的${ch[0]}知识群。`,points:ch[1].map(x=>x[0]),path:s.name};nodes.push(cn);links.push([core,cn]);
+   ch[1].forEach((p,pi)=>{const rand=hash(s.id+ci+'-'+pi),offset=(pi-(ch[1].length-1)/2)*.105+(rand()-.5)*.035,r=760+ci*27+(pi%2)*72;const n={id:`${s.id}-${ci}-${pi}`,name:p[0],subject:s,level:2,x:Math.cos(a+offset)*r,y:Math.sin(a+offset)*r,r:4.2+(rand()*2.2),desc:p[1],points:p[2].split('|'),path:`${s.name} / ${ch[0]}`};nodes.push(n);links.push([cn,n]);
+   });
+  });
+ });
+ for(let i=0;i<850;i++){const r=Math.random();bgStars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.25+.15,a:Math.random()*.7+.12,p:Math.random()*6.28,z:r*r});}
+}
+function resize(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=W*DPR;canvas.height=H*DPR;canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);if(!bgStars.length)buildUniverse()}
+const screen=n=>({x:W/2+(n.x-camera.x)*camera.zoom,y:H/2+(n.y-camera.y)*camera.zoom});
+function nebula(x,y,r,c){const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,c+'22');g.addColorStop(.35,c+'0e');g.addColorStop(1,c+'00');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
+function draw(){
+ time+=reduce?0:.008;camera.x+=(camera.targetX-camera.x)*.08;camera.y+=(camera.targetY-camera.y)*.08;camera.zoom+=(camera.targetZoom-camera.zoom)*.09;
+ ctx.clearRect(0,0,W,H);galaxy.style.setProperty('--px',Math.max(-22,Math.min(22,-camera.x*.012))+'px');galaxy.style.setProperty('--py',Math.max(-16,Math.min(16,-camera.y*.009))+'px');
+ const sky=ctx.createRadialGradient(W*.48,H*.46,0,W*.48,H*.46,Math.max(W,H)*.7);sky.addColorStop(0,'rgba(5,15,27,.08)');sky.addColorStop(.48,'rgba(2,7,14,.18)');sky.addColorStop(1,'rgba(1,3,8,.52)');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ bgStars.forEach((s,i)=>{let x=(s.x-camera.x*s.z*.018)%W;if(x<0)x+=W;let y=(s.y-camera.y*s.z*.018)%H;if(y<0)y+=H;const tw=reduce?1:.72+.28*Math.sin(time*2+s.p+i);ctx.globalAlpha=s.a*tw;ctx.fillStyle='#d8ecff';ctx.fillRect(x,y,s.r,s.r)});ctx.globalAlpha=1;
+ SUBJECTS.forEach(s=>{if(!active.has(s.id))return;const core=nodes.find(n=>n.id===s.id),p=screen(core);nebula(p.x,p.y,440*camera.zoom,s.color)});
+ ctx.lineWidth=.6;links.forEach(([a,b])=>{if(!active.has(a.subject.id))return;const A=screen(a),B=screen(b);ctx.strokeStyle=a.subject.color+(query&&!matches(b)?'08':'20');ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke()});
+ hover=null;const mx=pointer.x,my=pointer.y;
+ nodes.forEach(n=>{if(!active.has(n.subject.id))return;const p=screen(n),isMatch=matches(n),dim=query&&!isMatch;if(p.x<-80||p.x>W+80||p.y<-80||p.y>H+80)return;let rr=Math.max(1.4,n.r*camera.zoom),pulse=1+(reduce?0:Math.sin(time*3+n.x)*.09);if(Math.hypot(mx-p.x,my-p.y)<Math.max(11,rr+7))hover=n;ctx.globalAlpha=dim?.09:1;
+  if(n.level<2||n===selected||n===hover||isMatch&&query){const glow=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rr*7);glow.addColorStop(0,n.subject.color+'bb');glow.addColorStop(.18,n.subject.color+'50');glow.addColorStop(1,n.subject.color+'00');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(p.x,p.y,rr*7,0,Math.PI*2);ctx.fill()}
+  ctx.fillStyle=n===selected?'#ffffff':n.subject.color;ctx.beginPath();ctx.arc(p.x,p.y,rr*pulse,0,Math.PI*2);ctx.fill();
+  const show=n.level<2||camera.zoom>1.05||n===hover||(query&&isMatch);if(show){ctx.globalAlpha=dim?.12:n.level===2?.72:1;ctx.fillStyle='#dcecff';ctx.font=`${n.level===0?600:500} ${Math.max(10,n.level===0?15:n.level===1?12:10)}px "Microsoft YaHei UI"`;ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(n.name,p.x+rr+7,p.y)}ctx.globalAlpha=1;
+ });
+ canvas.style.cursor=drag?'grabbing':hover?'pointer':'grab';requestAnimationFrame(draw)
+}
+const pointer={x:-999,y:-999};function matches(n){return !query||`${n.name}${n.path}${n.desc}${n.points.join('')}`.toLowerCase().includes(query)}
+function setZoom(z){camera.targetZoom=Math.max(.35,Math.min(2.5,z))}
+function reset(){camera.targetX=0;camera.targetY=0;setZoom(innerWidth<700?.42:.62);selected=null;details.classList.remove('open')}
+function show(n){selected=n;details.style.setProperty('--node-color',n.subject.color);dSubject.textContent=n.subject.name;dTitle.textContent=n.name;dPath.textContent=n.path;dDesc.textContent=n.desc;dPoints.innerHTML=n.points.map(x=>`<li>${x}</li>`).join('');details.classList.add('open');intro.classList.add('gone');hint.classList.add('hide')}
+
+const legend=document.querySelector('.legend'),details=document.querySelector('#details'),intro=document.querySelector('#intro');
+SUBJECTS.forEach(s=>{const b=document.createElement('button');b.className='filter active';b.style.setProperty('--c',s.color);b.textContent=s.name;b.onclick=()=>{active.has(s.id)?active.delete(s.id):active.add(s.id);b.classList.toggle('active',active.has(s.id));status.textContent=`${nodes.filter(n=>active.has(n.subject.id)).length} 颗知识星体`};legend.appendChild(b)});
+status.textContent=`${nodes.length} 颗知识星体 · 4 条学科星河`;
+canvas.addEventListener('pointerdown',e=>{drag=true;moved=false;last={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{pointer.x=e.clientX;pointer.y=e.clientY;if(drag){const dx=e.clientX-last.x,dy=e.clientY-last.y;if(Math.abs(dx)+Math.abs(dy)>2)moved=true;camera.targetX-=dx/camera.zoom;camera.targetY-=dy/camera.zoom;last={x:e.clientX,y:e.clientY};intro.classList.add('gone')}});canvas.addEventListener('pointerup',()=>{drag=false;if(!moved&&hover)show(hover)});canvas.addEventListener('pointerleave',()=>{drag=false;pointer.x=-999});canvas.addEventListener('wheel',e=>{e.preventDefault();setZoom(camera.targetZoom*Math.exp(-e.deltaY*.001));intro.classList.add('gone')},{passive:false});
+document.querySelector('#search').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();const hit=nodes.find(matches);if(query&&hit){camera.targetX=hit.x;camera.targetY=hit.y;setZoom(1.25);status.textContent=`找到 ${nodes.filter(matches).length} 个相关知识点`}else status.textContent=query?'未找到匹配知识点':`${nodes.length} 颗知识星体 · 4 条学科星河`});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){e.preventDefault();document.querySelector('#search').focus()}if(e.key==='Escape'){details.classList.remove('open');document.querySelector('#search').blur()}});
+document.querySelector('#plus').onclick=()=>setZoom(camera.targetZoom*1.25);document.querySelector('#minus').onclick=()=>setZoom(camera.targetZoom/1.25);document.querySelector('#home').onclick=reset;document.querySelector('#close').onclick=()=>{details.classList.remove('open');selected=null};document.querySelector('#enter').onclick=()=>{intro.classList.add('gone');setZoom(.78);hint.classList.remove('hide')};
+addEventListener('resize',resize);resize();requestAnimationFrame(draw);
+}
+</script>
+<script src="./universe3d.js"></script>
+</body>
+</html>
+
+
+
+
+
