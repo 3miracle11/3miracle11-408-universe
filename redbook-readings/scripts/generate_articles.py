@@ -169,11 +169,12 @@ def main() -> None:
             30000 if global_index == 57 else 7000,
         )
         missing = validate_result(result, len(unit["words"]))
-        for repair in range(2):
+        for repair in range(4):
             if not missing:
                 break
             print(f"  repairing {len(missing)} missing words", flush=True)
-            result = api_call(
+            previous = result
+            repaired = api_call(
                 token,
                 args.model,
                 [
@@ -182,6 +183,15 @@ def main() -> None:
                 ],
                 30000 if global_index == 57 else 8000,
             )
+            # A repair response occasionally omits metadata that did not
+            # change. Preserve those fields from the last complete result.
+            for key in (
+                "title_en", "title_zh", "english", "translation",
+                "normalized_vocabulary", "corrections",
+            ):
+                if key not in repaired:
+                    repaired[key] = previous[key]
+            result = repaired
             missing = validate_result(result, len(unit["words"]))
         if missing:
             raise RuntimeError(f"Coverage failed for unit {global_index}: {missing}")
