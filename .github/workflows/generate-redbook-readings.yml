@@ -1,0 +1,48 @@
+name: Generate redbook bilingual readings
+
+on:
+  pull_request:
+    paths:
+      - "redbook-readings/source/**"
+      - "redbook-readings/scripts/**"
+      - ".github/workflows/generate-redbook-readings.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  models: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - { start: 1, end: 10 }
+          - { start: 11, end: 20 }
+          - { start: 21, end: 30 }
+          - { start: 31, end: 40 }
+          - { start: 41, end: 50 }
+          - { start: 51, end: 57 }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate and verify articles
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >-
+          python redbook-readings/scripts/generate_articles.py
+          --source redbook-readings/source/units.json
+          --output redbook-readings/articles
+          --start ${{ matrix.start }}
+          --end ${{ matrix.end }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: redbook-articles-${{ matrix.start }}-${{ matrix.end }}
+          path: redbook-readings/articles
+          if-no-files-found: error
