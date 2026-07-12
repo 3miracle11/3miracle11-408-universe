@@ -1,0 +1,30 @@
+name: Regenerate redbook Unit 31 as chapters
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/regenerate-redbook-unit31.yml"
+      - "tools/regenerate_redbook_unit31.py"
+
+permissions:
+  contents: read
+  models: read
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate chaptered Unit 31
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python tools/regenerate_redbook_unit31.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: redbook-unit-31-chaptered
+          path: unit31-output
+          if-no-files-found: error
