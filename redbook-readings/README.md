@@ -4,6 +4,7 @@
 
 - `articles/required/`：必考词 Unit 1-26
 - `articles/basic/`：基础词 Unit 1-31
+- `redbook-57-bilingual-articles.zip`：上述 57 篇文章的打包下载文件
 - `source/units.json`：从用户提供的扫描版 PDF 提取的单元词表与 OCR 核验信息
 - `scripts/generate_articles.py`：使用 GitHub Models 生成、修正和校验文章
 
